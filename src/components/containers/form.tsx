@@ -16,17 +16,24 @@ import { Input } from "@/components/ui/input"
 import { Container } from "@/components/ui/container"
 
 const formSchema = z.object({
-    username: z.string().min(2, ),
+    username: z.string().min(2),
     })
+
+   
 
 const FormComponent = () => {
     const form = useForm<z.infer<typeof formSchema>>({
-        mode: 'onBlur',
+        mode: 'all',
         resolver: zodResolver(formSchema),
         defaultValues: {
             username: "",
         },
     })
+
+    const onUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const upperCaseValue = event.target.value.toUpperCase();
+        form.setValue('username', upperCaseValue, { shouldValidate: true });
+    };
 
     const onSubmit = (data: z.infer<typeof formSchema>) => {
         console.log(data)
@@ -40,13 +47,13 @@ const FormComponent = () => {
                 name="username"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                        <Input placeholder="shadcn" {...field} onBlur={field.onBlur}/>
-                    </FormControl>
-                    <FormDescription>
-                    </FormDescription>
-                    <FormMessage />
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                            <Input placeholder="shadcn" {...field} onChange={onUsernameChange}/>
+                        </FormControl>
+                        <FormDescription>
+                        </FormDescription>
+                        <FormMessage />
                     </FormItem>
                 )}
                 />
